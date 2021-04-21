@@ -1,0 +1,18 @@
+# syntax = edrevo/dockerfile-plus
+
+INCLUDE+ Dockerfile
+
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    libicu-dev \
+    postgresql-server-dev-$PGVERSION 
+
+RUN cd /home/ \
+    && git clone https://github.com/adjust/wltree.git \
+    && cd wltree \
+    && make 
+
+RUN mv /home/wltree/*.sql /usr/share/postgresql/$PGVERSION/extension/
+RUN mv /home/wltree/wltree.control /usr/share/postgresql/$PGVERSION/extension/
+RUN mv /home/wltree/*.so /usr/lib/postgresql/$PGVERSION/lib/
