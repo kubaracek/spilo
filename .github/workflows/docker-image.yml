@@ -32,4 +32,4 @@ jobs:
         DOCKER_BUILDKIT: 1
         COMPOSE_DOCKER_CLI_BUILD: 1
     - name: Publish Package
-      run: docker push
+      run: docker push jakubracek/spilo-wltree
