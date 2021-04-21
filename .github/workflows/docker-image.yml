@@ -1,0 +1,29 @@
+name: Build Spilo with WLTREE
+
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get the tag version
+      id: get_tag_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      shell: bash
+    - name: Get PG Version
+      id: get_pg_version
+      run: echo ::set-output name=VERSION::$(cat Dockerfile | grep "ARG PGVERSION=" | sed -n -e 's/ARG PGVERSION=\(.*\)/\1/p')
+    - name: Test
+    - name: Build the Docker image
+      run: cd postgres-appliance && docker build . --file Dockerfile.with-wltree --tag jakubracek/spilo-wltree:${{ steps.get_pg_version.outputs.VERSION }}-${{ steps.get_tag_version.outputs.VERSION }}
+      env:
+        DOCKER_BUILDKIT: 1
+        COMPOSE_DOCKER_CLI_BUILD: 1
