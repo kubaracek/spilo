@@ -20,7 +20,7 @@ jobs:
       shell: bash
     - name: Get PG Version
       id: get_pg_version
-      run: echo ::set-output name=VERSION::$(cat Dockerfile | grep "ARG PGVERSION=" | sed -n -e 's/ARG PGVERSION=\(.*\)/\1/p')
+      run: echo ::set-output name=VERSION::$(cat postgres-appliance/Dockerfile | grep "ARG PGVERSION=" | sed -n -e 's/ARG PGVERSION=\(.*\)/\1/p')
     - name: Build the Docker image
       run: cd postgres-appliance && docker build . --file Dockerfile.with-wltree --tag jakubracek/spilo-wltree:${{ steps.get_pg_version.outputs.VERSION }}-${{ steps.get_tag_version.outputs.VERSION }}
       env:
